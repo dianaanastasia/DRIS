@@ -106,10 +106,7 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 	</div>
 	<tw-storydata name="DRIS E-learning" startnode="1" creator="Twine" creator-version="2.11.1" format="SugarCube" format-version="2.37.3" ifid="9812B3E6-3F68-4EBF-8AE7-B41911A31C9B" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/* ==========================================================
    DRIS / Twine responsive scenario layout
-   Clean version
-   - 3:2 scenario images
-   - Hotspots stay aligned
-   - Mobile layout avoids cropping bottom buttons
+   Stable 3:2 image + hotspot layout
    ========================================================== */
 
 
@@ -120,12 +117,10 @@ body {
   margin: 0 !important;
   padding: 0 !important;
   width: 100% !important;
-  min-width: 100% !important;
   min-height: 100svh !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
   background: #f7f3ed !important;
-  color: #ffffff;
 }
 
 
@@ -139,172 +134,147 @@ body {
 #ui-dialog,
 #ui-overlay {
   display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
 }
 
 
-/* ---------- Remove SugarCube default layout ---------- */
+/* ---------- SugarCube layout reset ---------- */
 
 #story,
 #passages,
 .passage {
   margin: 0 !important;
   padding: 0 !important;
-
   width: 100% !important;
   max-width: none !important;
   min-height: 100svh !important;
-
+  background: #f7f3ed !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
-
-  background: #f7f3ed !important;
-
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
 }
 
 #story {
   margin-left: 0 !important;
 }
 
-
-/* ---------- Scenario frame ----------
-   The frame keeps the same 3:2 ratio as the images.
-   Hotspots are positioned relative to this frame.
-*/
-
-.scene-shell {
-  position: relative;
-
-  width: min(100vw, 150svh);
-  max-width: 1536px;
-
-  aspect-ratio: 3 / 2;
-  height: auto;
-
-  margin: 0 auto;
-  padding: 0;
-
-  box-sizing: border-box;
-
-  background: #ffffff;
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-
-  overflow: hidden;
-}
-
-
-/* ---------- Image stage ---------- */
-
-.scene {
-  position: relative;
-
-  width: 100%;
-  height: 100%;
-
-  margin: 0;
-  padding: 0;
-
-  overflow: hidden;
-  background: #ffffff;
-
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-}
-
-
-/* ---------- Image handling ----------
-   object-fit: fill is safe because the parent uses the
-   same 3:2 aspect ratio as the image.
-*/
-
-.scene img {
-  position: absolute;
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-
-  display: block;
-
-  object-fit: fill;
-  object-position: center center;
-
-  margin: 0;
-  padding: 0;
-
-  border: none;
-  border-radius: 0;
-
-  transform: none !important;
-
-  user-select: none;
-  -webkit-user-drag: none;
+#passages,
+.passage {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
 }
 
 
 /* ==========================================================
-   HOTSPOTS — BASE
+   SCENARIO FRAME
+   This is the critical part.
+   The frame gets a real calculated height through aspect-ratio.
+   .scene is placed inside it with grid instead of height: 100%.
+   ========================================================== */
+
+.scene-shell {
+  position: relative !important;
+
+  width: min(100vw, 150svh) !important;
+  max-width: 1536px !important;
+
+  aspect-ratio: 3 / 2 !important;
+
+  margin: 0 auto !important;
+  padding: 0 !important;
+
+  display: grid !important;
+  grid-template-areas: "stage" !important;
+
+  box-sizing: border-box !important;
+
+  background: #ffffff !important;
+  overflow: hidden !important;
+}
+
+
+/* ---------- Scene stage ---------- */
+
+.scene {
+  grid-area: stage !important;
+  position: relative !important;
+
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 3 / 2 !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  background: #ffffff !important;
+  overflow: hidden !important;
+}
+
+
+/* ---------- Image ---------- */
+
+.scene img {
+  position: absolute !important;
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  display: block !important;
+
+  object-fit: fill !important;
+  object-position: center center !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  border: 0 !important;
+  transform: none !important;
+
+  user-select: none !important;
+  -webkit-user-drag: none !important;
+}
+
+
+/* ==========================================================
+   HOTSPOTS BASE
    ========================================================== */
 
 .hotspot,
 .survey-hotspot,
 .restart-hotspot {
-  position: absolute;
-  display: block;
-  z-index: 50;
+  position: absolute !important;
+  display: block !important;
+  z-index: 50 !important;
 
-  background: rgba(255, 255, 255, 0);
-  border: none;
+  background: rgba(255, 255, 255, 0) !important;
+  border: none !important;
 
-  cursor: pointer;
-  text-decoration: none;
+  cursor: pointer !important;
+  text-decoration: none !important;
 
   color: transparent !important;
   font-size: 0 !important;
   line-height: 0 !important;
 
-  pointer-events: auto;
+  pointer-events: auto !important;
 }
 
 .hotspot:hover,
 .survey-hotspot:hover,
 .restart-hotspot:hover {
-  background: rgba(255, 255, 255, 0.035);
+  background: rgba(255, 255, 255, 0.035) !important;
 }
 
 .hotspot:focus-visible,
 .survey-hotspot:focus-visible,
 .restart-hotspot:focus-visible {
-  outline: 3px solid rgba(0, 0, 0, 0.75);
-  outline-offset: 2px;
-}
-
-.hotspot:link,
-.hotspot:visited,
-.hotspot:hover,
-.hotspot:active,
-.survey-hotspot:link,
-.survey-hotspot:visited,
-.survey-hotspot:hover,
-.survey-hotspot:active,
-.restart-hotspot:link,
-.restart-hotspot:visited,
-.restart-hotspot:hover,
-.restart-hotspot:active {
-  color: transparent !important;
-  text-decoration: none !important;
+  outline: 3px solid rgba(0, 0, 0, 0.75) !important;
+  outline-offset: 2px !important;
 }
 
 
 /* ==========================================================
-   HOTSPOTS — GENERAL BUTTON POSITIONS
+   HOTSPOT POSITIONS
    ========================================================== */
 
 .hotspot-start-scenario {
@@ -391,9 +361,7 @@ body {
 }
 
 
-/* ==========================================================
-   END PAGE — survey + restart
-   ========================================================== */
+/* ---------- End page ---------- */
 
 .survey-hotspot {
   left: 7.2%;
@@ -414,8 +382,8 @@ body {
 
 /* ==========================================================
    MOBILE
-   One clean mobile rule block only.
-   Shows the full 3:2 image without cropping.
+   The full 3:2 image is shown.
+   The image is slightly smaller so bottom buttons remain visible.
    ========================================================== */
 
 @media (max-width: 700px) {
@@ -441,49 +409,39 @@ body {
     overflow-x: hidden !important;
     overflow-y: auto !important;
 
+    background: #f7f3ed !important;
+
     display: flex !important;
     align-items: flex-start !important;
     justify-content: center !important;
-
-    background: #f7f3ed !important;
   }
 
   .scene-shell {
-    position: relative !important;
-
-    /*
-      94vw gives good width on mobile.
-      140svh prevents the image from becoming too tall
-      in relation to the visible mobile viewport.
-    */
-    width: min(94vw, 140svh) !important;
-    max-width: min(94vw, 140svh) !important;
+    width: 94vw !important;
+    max-width: 94vw !important;
 
     aspect-ratio: 3 / 2 !important;
-    height: auto !important;
 
     margin-top: 0 !important;
-    margin-bottom: 12px !important;
+    margin-bottom: 16px !important;
     margin-left: auto !important;
     margin-right: auto !important;
 
-    padding: 0 !important;
-    box-sizing: border-box !important;
+    display: grid !important;
+    grid-template-areas: "stage" !important;
 
+    overflow: visible !important;
     background: #ffffff !important;
-    overflow: hidden !important;
   }
 
   .scene {
-    position: relative !important;
+    grid-area: stage !important;
 
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
+    aspect-ratio: 3 / 2 !important;
 
-    margin: 0 !important;
-    padding: 0 !important;
-
-    overflow: hidden !important;
+    overflow: visible !important;
     background: #ffffff !important;
   }
 
@@ -494,31 +452,16 @@ body {
     width: 100% !important;
     height: 100% !important;
 
-    display: block !important;
-
     object-fit: fill !important;
     object-position: center center !important;
 
     transform: none !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-  }
-
-  .hotspot,
-  .survey-hotspot,
-  .restart-hotspot {
-    position: absolute !important;
-    z-index: 50 !important;
-    pointer-events: auto !important;
   }
 }
 
 
 /* ==========================================================
    MOBILE LANDSCAPE
-   Uses more of the available screen height.
    ========================================================== */
 
 @media (max-width: 900px) and (orientation: landscape) {
@@ -534,7 +477,6 @@ body {
     width: min(100vw, 150svh) !important;
     max-width: min(100vw, 150svh) !important;
     aspect-ratio: 3 / 2 !important;
-
     margin: 0 auto !important;
   }
 }
@@ -542,7 +484,7 @@ body {
 
 /* ==========================================================
    DEBUG MODE
-   Activate temporarily to see clickable hotspot areas.
+   Uncomment temporarily to see hotspot areas.
    ========================================================== */
 
 /*
