@@ -105,8 +105,11 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
 	<tw-storydata name="DRIS E-learning" startnode="1" creator="Twine" creator-version="2.11.1" format="SugarCube" format-version="2.37.3" ifid="9812B3E6-3F68-4EBF-8AE7-B41911A31C9B" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/* ==========================================================
-   DRIS / Twine scenario layout
-   Version: Full image visible + aligned overlay hotspots
+   DRIS / Twine responsive scenario layout
+   Stable version for GitHub Pages + mobile
+   - Shows full 3:2 image
+   - Keeps hotspots aligned
+   - Prevents buttons from being cropped
    ========================================================== */
 
 
@@ -116,12 +119,11 @@ html,
 body {
   margin: 0 !important;
   padding: 0 !important;
-
   width: 100% !important;
-  height: 100% !important;
-
-  overflow: hidden !important;
-
+  min-width: 100% !important;
+  min-height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
   background: #f7f3ed !important;
   color: #ffffff;
 }
@@ -142,21 +144,20 @@ body {
 }
 
 
-/* ---------- Remove SugarCube default spacing ---------- */
+/* ---------- Remove SugarCube default layout ---------- */
 
 #story {
-  position: fixed !important;
-  inset: 0 !important;
-
   margin: 0 !important;
   padding: 0 !important;
   margin-left: 0 !important;
 
-  width: 100vw !important;
-  height: 100vh !important;
+  width: 100% !important;
   max-width: none !important;
+  min-height: 100dvh !important;
 
-  overflow: hidden !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+
   background: #f7f3ed !important;
 
   display: flex !important;
@@ -165,16 +166,20 @@ body {
 }
 
 
+/* ---------- Remove passage spacing ---------- */
+
 #passages,
 .passage {
   margin: 0 !important;
   padding: 0 !important;
 
-  width: 100vw !important;
-  height: 100vh !important;
+  width: 100% !important;
   max-width: none !important;
+  min-height: 100dvh !important;
 
-  overflow: hidden !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+
   background: #f7f3ed !important;
 
   display: flex !important;
@@ -184,17 +189,18 @@ body {
 
 
 /* ---------- Scenario frame ----------
-   Viktigt:
-   Denna yta har samma proportion som bilderna.
-   Därför följer hotspots rätt position även när skärmen ändras.
-   Anpassad för 3:2-bilder.
+   IMPORTANT:
+   This frame keeps the same 3:2 ratio as your images.
+   Hotspots are positioned relative to this frame.
 */
 
 .scene-shell {
   position: relative;
 
-  width: min(100vw, 150vh);
-  height: min(66.6667vw, 100vh);
+  width: min(100vw, 150dvh);
+  aspect-ratio: 3 / 2;
+
+  max-width: 1536px;
 
   margin: 0 auto;
   padding: 0;
@@ -230,7 +236,11 @@ body {
 }
 
 
-/* ---------- Image handling ---------- */
+/* ---------- Image handling ----------
+   object-fit: fill is safe here because the parent has the
+   exact same 3:2 ratio as the image.
+   This keeps image and hotspots aligned.
+*/
 
 .scene img {
   position: absolute;
@@ -241,7 +251,7 @@ body {
 
   display: block;
 
-  object-fit: contain;
+  object-fit: fill;
   object-position: center center;
 
   margin: 0;
@@ -250,8 +260,7 @@ body {
   border: none;
   border-radius: 0;
 
-  transform: none;
-  transform-origin: center center;
+  transform: none !important;
 
   user-select: none;
   -webkit-user-drag: none;
@@ -259,17 +268,18 @@ body {
 
 
 /* ==========================================================
-   HOTSPOTS — GRUNDSTIL
+   HOTSPOTS — BASE
    ========================================================== */
 
-.hotspot {
+.hotspot,
+.survey-hotspot,
+.restart-hotspot {
   position: absolute;
   display: block;
-  z-index: 20;
+  z-index: 50;
 
   background: rgba(255, 255, 255, 0);
   border: none;
-  border-radius: 18px;
 
   cursor: pointer;
   text-decoration: none;
@@ -279,33 +289,65 @@ body {
   line-height: 0 !important;
 }
 
-.hotspot:hover {
+.hotspot:hover,
+.survey-hotspot:hover,
+.restart-hotspot:hover {
   background: rgba(255, 255, 255, 0.035);
 }
 
-.hotspot:focus-visible {
+.hotspot:focus-visible,
+.survey-hotspot:focus-visible,
+.restart-hotspot:focus-visible {
   outline: 3px solid rgba(0, 0, 0, 0.75);
   outline-offset: 2px;
 }
 
-
 .hotspot:link,
 .hotspot:visited,
 .hotspot:hover,
-.hotspot:active {
+.hotspot:active,
+.survey-hotspot:link,
+.survey-hotspot:visited,
+.survey-hotspot:hover,
+.survey-hotspot:active,
+.restart-hotspot:link,
+.restart-hotspot:visited,
+.restart-hotspot:hover,
+.restart-hotspot:active {
   color: transparent !important;
   text-decoration: none !important;
 }
 
 
 /* ==========================================================
-   HOTSPOTS — KNAPPAR LÄNGST NER TILL VÄNSTER
-   För era bilder med:
-   - Starta scenariot
-   - Gå vidare
-   - Fortsätt
-   - Vad tänker du?
+   HOTSPOTS — GENERAL BUTTON POSITIONS
+   Use these only if they match the current image.
+   For best accuracy, use image-specific classes.
    ========================================================== */
+
+.hotspot-start-scenario {
+  left: 4.2%;
+  top: 78.8%;
+  width: 31.2%;
+  height: 8.8%;
+  border-radius: 24px;
+}
+
+.hotspot-role-next {
+  left: 8.0%;
+  top: 82.0%;
+  width: 26.8%;
+  height: 8.8%;
+  border-radius: 24px;
+}
+
+.hotspot-meeting-continue {
+  left: 4.2%;
+  top: 79.6%;
+  width: 26.8%;
+  height: 8.8%;
+  border-radius: 22px;
+}
 
 .hotspot-main-button {
   left: 4.4%;
@@ -315,9 +357,6 @@ body {
   border-radius: 22px;
 }
 
-
-/* Lite bredare variant om knappen är längre */
-
 .hotspot-main-button-wide {
   left: 4.2%;
   top: 82.2%;
@@ -325,20 +364,6 @@ body {
   height: 9.8%;
   border-radius: 24px;
 }
-
-
-/* Variant för bilder där knappen ligger aningen lägre */
-
-.hotspot-main-button-low {
-  left: 4.4%;
-  top: 84.2%;
-  width: 26.8%;
-  height: 9.2%;
-  border-radius: 22px;
-}
-
-
-/* Variant för “Vad tänker du?” där knappen är lite bredare */
 
 .hotspot-thought-button {
   left: 4.3%;
@@ -349,11 +374,7 @@ body {
 }
 
 
-/* ==========================================================
-   HOTSPOTS — FLERVALSKNAPPAR
-   För bilden med flera svarsalternativ:
-   Skämt? / Obehag? / Eftertanke? / Mer information?
-   ========================================================== */
+/* ---------- Choice buttons ---------- */
 
 .hotspot-choice-1 {
   left: 4.3%;
@@ -389,113 +410,117 @@ body {
 
 
 /* ==========================================================
-   Survey hotspot / external survey button
+   SLUTSIDA — survey + restart
+   Adjust if needed after testing.
    ========================================================== */
 
-.survey-hotspot,
-.survey-hotspot:link,
-.survey-hotspot:visited,
-.survey-hotspot:hover,
-.survey-hotspot:active {
-  color: transparent !important;
-  text-decoration: none !important;
-  font-size: 0 !important;
-  line-height: 0 !important;
-  background: transparent !important;
-  border: none !important;
-  outline: none;
+.survey-hotspot {
+  left: 7.2%;
+  top: 62.8%;
+  width: 38.8%;
+  height: 11.2%;
+  border-radius: 26px;
+}
+
+.restart-hotspot {
+  left: 7.2%;
+  top: 76.4%;
+  width: 38.8%;
+  height: 8.8%;
+  border-radius: 24px;
+}
+
+
+/* ==========================================================
+   MOBILE
+   Shows full image.
+   Allows vertical scroll only if browser UI makes viewport too small.
+   No cropping.
+   ========================================================== */
+
+@media (max-width: 700px) {
+  html,
+  body {
+    width: 100% !important;
+    min-height: 100dvh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    background: #f7f3ed !important;
+  }
+
+  #story,
+  #passages,
+  .passage {
+    width: 100% !important;
+    min-height: 100dvh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    background: #f7f3ed !important;
+  }
+
+  .scene-shell {
+    width: 100vw;
+    max-width: 100vw;
+    aspect-ratio: 3 / 2;
+    margin: 0 auto;
+  }
+
+  .scene {
+    width: 100%;
+    height: 100%;
+  }
+
+  .scene img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    object-position: center center;
+  }
+
+  .hotspot,
+  .survey-hotspot,
+  .restart-hotspot {
+    z-index: 50;
+  }
+}
+
+
+/* ---------- Landscape mobile ----------
+   Uses full height if the phone is turned.
+*/
+
+@media (max-width: 900px) and (orientation: landscape) {
+  #story,
+  #passages,
+  .passage {
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+  }
+
+  .scene-shell {
+    width: min(100vw, 150dvh);
+    height: min(66.6667vw, 100dvh);
+    aspect-ratio: 3 / 2;
+  }
 }
 
 
 /* ==========================================================
    Debug mode
-   Aktivera detta tillfälligt när du placerar hotspots.
+   Activate temporarily to see click areas.
    ========================================================== */
 
 /*
-.hotspot {
+.hotspot,
+.survey-hotspot,
+.restart-hotspot {
   background: rgba(255, 0, 0, 0.22) !important;
   outline: 2px solid rgba(255, 0, 0, 0.75) !important;
 }
-*/
-
-
-/* ---------- Mobile / narrow screens ---------- */
-
-@media (max-width: 700px) {
-  #story,
-  #passages,
-  .passage {
-    width: 100vw !important;
-    height: 100vh !important;
-    min-height: 100vh !important;
-  }
-
-  .scene-shell {
-    width: 100vw;
-    height: min(66.6667vw, 100vh);
-  }
-
-  .hotspot {
-    border-radius: 12px;
-  }
-}
-
-
-/* ---------- Modern mobile viewport support ---------- */
-
-@supports (height: 100dvh) {
-  #story,
-  #passages,
-  .passage {
-    height: 100dvh !important;
-    min-height: 100dvh !important;
-  }
-}
-
-/* ==========================================================
-   IMAGE-SPECIFIC HOTSPOTS
-   Justerade klickytor för de tre första bilderna
-   ========================================================== */
-
-
-/* ---------- Bild 1: Starta scenariot ----------
-   Knappen ska vara lite mer avlång och ligga högre upp.
-*/
-
-.hotspot-start-scenario {
-  left: 4.2%;
-  top: 78.8%;
-  width: 31.2%;
-  height: 8.8%;
-  border-radius: 24px;
-}
-
-
-/* ---------- Bild 2: Gå vidare ----------
-   Knappen ska ligga lite högre upp och lite mer åt höger.
-*/
-
-.hotspot-role-next {
-  left: 8.0%;
-  top: 82.0%;
-  width: 26.8%;
-  height: 8.8%;
-  border-radius: 24px;
-}
-
-
-/* ---------- Bild 3: Fortsätt ----------
-   Knappen ska flyttas uppåt.
-*/
-
-.hotspot-meeting-continue {
-  left: 4.2%;
-  top: 79.6%;
-  width: 26.8%;
-  height: 8.8%;
-  border-radius: 22px;
-}</style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="Start" tags="" position="100,100" size="100,100">&lt;&lt;goto &quot;01_Startbild&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="01_Startbild" tags="" position="320,100" size="100,100">&lt;div class=&quot;scene-shell&quot;&gt;
+*/</style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="Start" tags="" position="100,100" size="100,100">&lt;&lt;goto &quot;01_Startbild&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="01_Startbild" tags="" position="320,100" size="100,100">&lt;div class=&quot;scene-shell&quot;&gt;
   &lt;div class=&quot;scene&quot;&gt;
     &lt;img src=&quot;1_Startbild.png&quot; alt=&quot;Varför säger du aldrig något?&quot;&gt;
 
