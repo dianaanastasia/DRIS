@@ -622,6 +622,112 @@ body {
     z-index: 50 !important;
     pointer-events: auto !important;
   }
+}
+
+/* ==========================================================
+   MOBILE FIX — move scenario image upward so bottom buttons show
+   Lägg längst ner i Story Stylesheet
+   ========================================================== */
+
+@media (max-width: 700px) {
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: 100dvh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    background: #f7f3ed !important;
+  }
+
+  #story,
+  #passages,
+  .passage {
+    width: 100% !important;
+    min-height: 100dvh !important;
+    height: auto !important;
+
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+
+    background: #f7f3ed !important;
+
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+
+    margin: 0 !important;
+
+    /* Viktigt: ingen topp-padding som trycker ner bilden */
+    padding-top: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-bottom: 16px !important;
+  }
+
+  .scene-shell {
+    position: relative !important;
+
+    /* Lite mindre bild så hela nedre knappområdet får plats */
+    width: 90vw !important;
+    max-width: 90vw !important;
+
+    /* Behåll exakt bildproportion */
+    aspect-ratio: 3 / 2 !important;
+    height: auto !important;
+
+    /* Flytta upp bilden */
+    margin-top: -10px !important;
+    margin-bottom: 16px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+
+    padding: 0 !important;
+    box-sizing: border-box !important;
+
+    background: #ffffff !important;
+    overflow: hidden !important;
+  }
+
+  .scene {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: hidden !important;
+    background: #ffffff !important;
+  }
+
+  .scene img {
+    position: absolute !important;
+    inset: 0 !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    display: block !important;
+
+    object-fit: fill !important;
+    object-position: center center !important;
+
+    transform: none !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  .hotspot,
+  .survey-hotspot,
+  .restart-hotspot {
+    position: absolute !important;
+    z-index: 50 !important;
+    pointer-events: auto !important;
+  }
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="Start" tags="" position="100,100" size="100,100">&lt;&lt;goto &quot;01_Startbild&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="01_Startbild" tags="" position="320,100" size="100,100">&lt;div class=&quot;scene-shell&quot;&gt;
   &lt;div class=&quot;scene&quot;&gt;
     &lt;img src=&quot;1_Startbild.png&quot; alt=&quot;Varför säger du aldrig något?&quot;&gt;
