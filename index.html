@@ -106,10 +106,10 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 	</div>
 	<tw-storydata name="DRIS E-learning" startnode="1" creator="Twine" creator-version="2.11.1" format="SugarCube" format-version="2.37.3" ifid="9812B3E6-3F68-4EBF-8AE7-B41911A31C9B" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/* ==========================================================
    DRIS / Twine responsive scenario layout
-   Stable version for GitHub Pages + mobile
-   - Shows full 3:2 image
-   - Keeps hotspots aligned
-   - Prevents buttons from being cropped
+   Clean version
+   - 3:2 scenario images
+   - Hotspots stay aligned
+   - Mobile layout avoids cropping bottom buttons
    ========================================================== */
 
 
@@ -121,7 +121,7 @@ body {
   padding: 0 !important;
   width: 100% !important;
   min-width: 100% !important;
-  min-height: 100% !important;
+  min-height: 100svh !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
   background: #f7f3ed !important;
@@ -146,28 +146,7 @@ body {
 
 /* ---------- Remove SugarCube default layout ---------- */
 
-#story {
-  margin: 0 !important;
-  padding: 0 !important;
-  margin-left: 0 !important;
-
-  width: 100% !important;
-  max-width: none !important;
-  min-height: 100dvh !important;
-
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-
-  background: #f7f3ed !important;
-
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-
-/* ---------- Remove passage spacing ---------- */
-
+#story,
 #passages,
 .passage {
   margin: 0 !important;
@@ -175,7 +154,7 @@ body {
 
   width: 100% !important;
   max-width: none !important;
-  min-height: 100dvh !important;
+  min-height: 100svh !important;
 
   overflow-x: hidden !important;
   overflow-y: auto !important;
@@ -187,20 +166,24 @@ body {
   justify-content: center !important;
 }
 
+#story {
+  margin-left: 0 !important;
+}
+
 
 /* ---------- Scenario frame ----------
-   IMPORTANT:
-   This frame keeps the same 3:2 ratio as your images.
+   The frame keeps the same 3:2 ratio as the images.
    Hotspots are positioned relative to this frame.
 */
 
 .scene-shell {
   position: relative;
 
-  width: min(100vw, 150dvh);
-  aspect-ratio: 3 / 2;
-
+  width: min(100vw, 150svh);
   max-width: 1536px;
+
+  aspect-ratio: 3 / 2;
+  height: auto;
 
   margin: 0 auto;
   padding: 0;
@@ -237,9 +220,8 @@ body {
 
 
 /* ---------- Image handling ----------
-   object-fit: fill is safe here because the parent has the
-   exact same 3:2 ratio as the image.
-   This keeps image and hotspots aligned.
+   object-fit: fill is safe because the parent uses the
+   same 3:2 aspect ratio as the image.
 */
 
 .scene img {
@@ -287,6 +269,8 @@ body {
   color: transparent !important;
   font-size: 0 !important;
   line-height: 0 !important;
+
+  pointer-events: auto;
 }
 
 .hotspot:hover,
@@ -321,8 +305,6 @@ body {
 
 /* ==========================================================
    HOTSPOTS — GENERAL BUTTON POSITIONS
-   Use these only if they match the current image.
-   For best accuracy, use image-specific classes.
    ========================================================== */
 
 .hotspot-start-scenario {
@@ -334,8 +316,8 @@ body {
 }
 
 .hotspot-role-next {
-  left: 8.0%;
-  top: 82.0%;
+  left: 8%;
+  top: 82%;
   width: 26.8%;
   height: 8.8%;
   border-radius: 24px;
@@ -410,8 +392,7 @@ body {
 
 
 /* ==========================================================
-   SLUTSIDA — survey + restart
-   Adjust if needed after testing.
+   END PAGE — survey + restart
    ========================================================== */
 
 .survey-hotspot {
@@ -433,16 +414,15 @@ body {
 
 /* ==========================================================
    MOBILE
-   Shows full image.
-   Allows vertical scroll only if browser UI makes viewport too small.
-   No cropping.
+   One clean mobile rule block only.
+   Shows the full 3:2 image without cropping.
    ========================================================== */
 
 @media (max-width: 700px) {
   html,
   body {
     width: 100% !important;
-    min-height: 100dvh !important;
+    min-height: 100svh !important;
     overflow-x: hidden !important;
     overflow-y: auto !important;
     background: #f7f3ed !important;
@@ -452,44 +432,94 @@ body {
   #passages,
   .passage {
     width: 100% !important;
-    min-height: 100dvh !important;
+    min-height: 100svh !important;
+    height: auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
     overflow-x: hidden !important;
     overflow-y: auto !important;
+
+    display: flex !important;
     align-items: flex-start !important;
     justify-content: center !important;
+
     background: #f7f3ed !important;
   }
 
   .scene-shell {
-    width: 100vw;
-    max-width: 100vw;
-    aspect-ratio: 3 / 2;
-    margin: 0 auto;
+    position: relative !important;
+
+    /*
+      94vw gives good width on mobile.
+      140svh prevents the image from becoming too tall
+      in relation to the visible mobile viewport.
+    */
+    width: min(94vw, 140svh) !important;
+    max-width: min(94vw, 140svh) !important;
+
+    aspect-ratio: 3 / 2 !important;
+    height: auto !important;
+
+    margin-top: 0 !important;
+    margin-bottom: 12px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+
+    padding: 0 !important;
+    box-sizing: border-box !important;
+
+    background: #ffffff !important;
+    overflow: hidden !important;
   }
 
   .scene {
-    width: 100%;
-    height: 100%;
+    position: relative !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: hidden !important;
+    background: #ffffff !important;
   }
 
   .scene img {
-    width: 100%;
-    height: 100%;
-    object-fit: fill;
-    object-position: center center;
+    position: absolute !important;
+    inset: 0 !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    display: block !important;
+
+    object-fit: fill !important;
+    object-position: center center !important;
+
+    transform: none !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
   }
 
   .hotspot,
   .survey-hotspot,
   .restart-hotspot {
-    z-index: 50;
+    position: absolute !important;
+    z-index: 50 !important;
+    pointer-events: auto !important;
   }
 }
 
 
-/* ---------- Landscape mobile ----------
-   Uses full height if the phone is turned.
-*/
+/* ==========================================================
+   MOBILE LANDSCAPE
+   Uses more of the available screen height.
+   ========================================================== */
 
 @media (max-width: 900px) and (orientation: landscape) {
   #story,
@@ -501,16 +531,18 @@ body {
   }
 
   .scene-shell {
-    width: min(100vw, 150dvh);
-    height: min(66.6667vw, 100dvh);
-    aspect-ratio: 3 / 2;
+    width: min(100vw, 150svh) !important;
+    max-width: min(100vw, 150svh) !important;
+    aspect-ratio: 3 / 2 !important;
+
+    margin: 0 auto !important;
   }
 }
 
 
 /* ==========================================================
-   Debug mode
-   Activate temporarily to see click areas.
+   DEBUG MODE
+   Activate temporarily to see clickable hotspot areas.
    ========================================================== */
 
 /*
@@ -520,215 +552,7 @@ body {
   background: rgba(255, 0, 0, 0.22) !important;
   outline: 2px solid rgba(255, 0, 0, 0.75) !important;
 }
-*/
-
-/* ==========================================================
-   MOBILE FIX — show full scenario image including bottom buttons
-   Lägg längst ner i Story Stylesheet
-   ========================================================== */
-
-@media (max-width: 700px) {
-  html,
-  body {
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
-    min-height: 100dvh !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    background: #f7f3ed !important;
-  }
-
-  #story,
-  #passages,
-  .passage {
-    width: 100% !important;
-    min-height: 100dvh !important;
-    height: auto !important;
-
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-
-    background: #f7f3ed !important;
-
-    display: flex !important;
-    align-items: flex-start !important;
-    justify-content: center !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  .scene-shell {
-    position: relative !important;
-
-    /* Gör bilden lite mindre på mobil så nedersta knapparna syns */
-	width: 88vw !important;
-	max-width: 88vw !important;
-
-    /* Behåll exakt samma proportion som bilderna */
-    aspect-ratio: 3 / 2 !important;
-    height: auto !important;
-
-    /* Flyttar ner bilden något från browser-toppen */
-    margin-top: 18px !important;
-    margin-bottom: 28px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-
-    padding: 0 !important;
-    box-sizing: border-box !important;
-
-    background: #ffffff !important;
-    overflow: hidden !important;
-  }
-
-  .scene {
-    position: relative !important;
-    width: 100% !important;
-    height: 100% !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    overflow: hidden !important;
-    background: #ffffff !important;
-  }
-
-  .scene img {
-    position: absolute !important;
-    inset: 0 !important;
-
-    width: 100% !important;
-    height: 100% !important;
-
-    display: block !important;
-
-    /* Viktigt: beskär inte bilden */
-    object-fit: fill !important;
-    object-position: center center !important;
-
-    transform: none !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-  }
-
-  .hotspot,
-  .survey-hotspot,
-  .restart-hotspot {
-    position: absolute !important;
-    z-index: 50 !important;
-    pointer-events: auto !important;
-  }
-}
-
-/* ==========================================================
-   MOBILE FIX — move scenario image upward so bottom buttons show
-   Lägg längst ner i Story Stylesheet
-   ========================================================== */
-
-@media (max-width: 700px) {
-  html,
-  body {
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
-    min-height: 100dvh !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    background: #f7f3ed !important;
-  }
-
-  #story,
-  #passages,
-  .passage {
-    width: 100% !important;
-    min-height: 100dvh !important;
-    height: auto !important;
-
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-
-    background: #f7f3ed !important;
-
-    display: flex !important;
-    align-items: flex-start !important;
-    justify-content: center !important;
-
-    margin: 0 !important;
-
-    /* Viktigt: ingen topp-padding som trycker ner bilden */
-    padding-top: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    padding-bottom: 16px !important;
-  }
-
-  .scene-shell {
-    position: relative !important;
-
-    /* Lite mindre bild så hela nedre knappområdet får plats */
-    width: 90vw !important;
-    max-width: 90vw !important;
-
-    /* Behåll exakt bildproportion */
-    aspect-ratio: 3 / 2 !important;
-    height: auto !important;
-
-    /* Flytta upp bilden */
-    margin-top: -30px !important;
-    margin-bottom: 30px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-
-    padding: 0 !important;
-    box-sizing: border-box !important;
-
-    background: #ffffff !important;
-    overflow: hidden !important;
-  }
-
-  .scene {
-    position: relative !important;
-    width: 100% !important;
-    height: 100% !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    overflow: hidden !important;
-    background: #ffffff !important;
-  }
-
-  .scene img {
-    position: absolute !important;
-    inset: 0 !important;
-
-    width: 100% !important;
-    height: 100% !important;
-
-    display: block !important;
-
-    object-fit: fill !important;
-    object-position: center center !important;
-
-    transform: none !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-  }
-
-  .hotspot,
-  .survey-hotspot,
-  .restart-hotspot {
-    position: absolute !important;
-    z-index: 50 !important;
-    pointer-events: auto !important;
-  }
-}</style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="Start" tags="" position="100,100" size="100,100">&lt;&lt;goto &quot;01_Startbild&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="01_Startbild" tags="" position="320,100" size="100,100">&lt;div class=&quot;scene-shell&quot;&gt;
+*/</style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="Start" tags="" position="100,100" size="100,100">&lt;&lt;goto &quot;01_Startbild&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="01_Startbild" tags="" position="320,100" size="100,100">&lt;div class=&quot;scene-shell&quot;&gt;
   &lt;div class=&quot;scene&quot;&gt;
     &lt;img src=&quot;1_Startbild.png&quot; alt=&quot;Varför säger du aldrig något?&quot;&gt;
 
