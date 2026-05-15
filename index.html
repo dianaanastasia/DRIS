@@ -106,16 +106,16 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 	</div>
 	<tw-storydata name="DRIS E-learning" startnode="1" creator="Twine" creator-version="2.11.1" format="SugarCube" format-version="2.37.3" ifid="9812B3E6-3F68-4EBF-8AE7-B41911A31C9B" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">
 
-/* ---------- Global reset ---------- */
-
 html,
 body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: #071713;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
   color: #ffffff;
 }
 
@@ -126,111 +126,122 @@ body {
 #ui-bar-tray,
 #menu,
 #story-title,
-#story-caption {
+#story-caption,
+#ui-dialog,
+#ui-overlay {
   display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
 }
 
 
-/* ---------- Remove SugarCube default spacing ---------- */
+/* ---------- Remove SugarCube default layout ---------- */
 
-#story,
+#story {
+  margin: 0 !important;
+  padding: 0 !important;
+  margin-left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  min-width: 100vw !important;
+  min-height: 100vh !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+
+  display: block !important;
+  position: fixed !important;
+  inset: 0 !important;
+}
+
+
+/* ---------- Remove passage spacing ---------- */
+
 #passages,
 .passage {
   margin: 0 !important;
   padding: 0 !important;
-  max-width: none !important;
   width: 100vw !important;
   height: 100vh !important;
+  max-width: none !important;
+  min-width: 100vw !important;
+  min-height: 100vh !important;
   overflow: hidden !important;
+  background: #ffffff !important;
+
+  display: block !important;
+  position: relative !important;
 }
 
 
-/* ---------- Main background ---------- */
-
-#story {
-  background:
-    radial-gradient(circle at center, rgba(35, 82, 65, 0.34), transparent 58%),
-    linear-gradient(180deg, #071713 0%, #0b1d18 100%);
-
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-
-/* ---------- Center passage content ---------- */
-
-#passages,
-.passage {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-
-/* ---------- Scenario frame ---------- */
+/* ---------- Scenario fullscreen frame ---------- */
 
 .scene-shell {
-  /*
-    The image is 3:2.
-    This keeps the full scenario inside the viewport
-    without vertical scrolling.
-  */
-  width: min(100vw, 150vh);
-  height: min(66.6667vw, 100vh);
+  position: fixed;
+  inset: 0;
 
-  margin: 0 auto;
+  width: 100vw;
+  height: 100vh;
+
+  margin: 0;
   padding: 0;
   box-sizing: border-box;
 
-  background: transparent;
+  background: #ffffff;
   border: none;
   border-radius: 0;
   box-shadow: none;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
 }
 
 
 /* ---------- Image stage ---------- */
 
 .scene {
-  position: relative;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  margin: 0;
+  padding: 0;
 
   overflow: hidden;
-  background: #f7f3ed;
+  background: #ffffff;
 
-  border-radius: clamp(10px, 1.2vw, 22px);
-
-  box-shadow:
-    0 22px 70px rgba(0, 0, 0, 0.45),
-    0 0 90px rgba(25, 68, 54, 0.35);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 
-/* ---------- Image handling ----------
-   This keeps the image responsive while cropping away
-   tiny unwanted edge artifacts, especially the gray top edge.
+/* ---------- Fullscreen image handling ----------
+   Bilden fyller hela ytan.
+   object-fit: cover gör att inga marginaler syns.
+   OBS: detta kan beskära lite i kanterna om bilden inte har samma proportion som skärmen.
 */
 
 .scene img {
+  position: absolute;
+  inset: 0;
+
   width: 100%;
   height: 100%;
+
   display: block;
 
-  object-fit: contain;
+  object-fit: cover;
   object-position: center center;
 
-  /*
-    Subtle zoom to hide generated gray/white edge artifacts.
-    Keep this small so overlay buttons still align correctly.
-    Recommended range: 1.010–1.025
-  */
-  transform: scale(1.025);
+  margin: 0;
+  padding: 0;
+
+  border: none;
+  border-radius: 0;
+
+  transform: none;
   transform-origin: center center;
 
   user-select: none;
@@ -251,6 +262,10 @@ body {
 
   cursor: pointer;
   text-decoration: none;
+
+  color: transparent !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
 }
 
 .hotspot:hover {
@@ -258,49 +273,24 @@ body {
 }
 
 .hotspot:focus-visible {
-  outline: 3px solid rgba(255, 255, 255, 0.9);
+  outline: 3px solid rgba(0, 0, 0, 0.75);
   outline-offset: 2px;
 }
 
 
-/* ---------- Debug mode ----------
-   Uncomment this block temporarily if you need to see
-   exactly where the invisible buttons are placed.
-*/
+/* ---------- Remove default link styling inside hotspots ---------- */
 
-/*
-.hotspot {
-  background: rgba(255, 0, 0, 0.22);
-  outline: 2px solid rgba(255, 0, 0, 0.75);
-}
-*/
-
-
-/* ---------- Mobile / narrow screens ---------- */
-
-@media (max-width: 700px) {
-  .scene {
-    border-radius: 10px;
-  }
-
-  .hotspot {
-    border-radius: 12px;
-  }
-
-  .scene img {
-    transform: scale(1.014);
-  }
+.hotspot:link,
+.hotspot:visited,
+.hotspot:hover,
+.hotspot:active {
+  color: transparent !important;
+  text-decoration: none !important;
 }
 
 
-/* ---------- Very low-height screens ---------- */
+/* ---------- Survey hotspot / external survey button ---------- */
 
-@media (max-height: 650px) {
-  .scene img {
-    transform: scale(1.014);
-  }
-}
-/* Tar bort synliga länkeffekter på extern enkätknapp */
 .survey-hotspot,
 .survey-hotspot:link,
 .survey-hotspot:visited,
@@ -313,6 +303,63 @@ body {
   background: transparent !important;
   border: none !important;
   outline: none;
+}
+
+
+/* ---------- Debug mode ----------
+   Aktivera endast tillfälligt om du behöver se var hotspots ligger.
+*/
+
+/*
+.hotspot {
+  background: rgba(255, 0, 0, 0.22) !important;
+  outline: 2px solid rgba(255, 0, 0, 0.75) !important;
+}
+*/
+
+
+/* ---------- Mobile / narrow screens ---------- */
+
+@media (max-width: 700px) {
+  html,
+  body,
+  #story,
+  #passages,
+  .passage,
+  .scene-shell,
+  .scene {
+    width: 100vw !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    overflow: hidden !important;
+  }
+
+  .scene img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  .hotspot {
+    border-radius: 12px;
+  }
+}
+
+
+/* ---------- Modern mobile viewport support ---------- */
+
+@supports (height: 100dvh) {
+  html,
+  body,
+  #story,
+  #passages,
+  .passage,
+  .scene-shell,
+  .scene {
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+  }
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="Start" tags="" position="100,100" size="100,100">&lt;&lt;goto &quot;01_Startbild&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="01_Startbild" tags="" position="320,100" size="100,100">&lt;div class=&quot;scene-shell&quot;&gt;
   &lt;div class=&quot;scene&quot;&gt;
     &lt;img src=&quot;1_Startbild.png&quot; alt=&quot;&quot;&gt;
