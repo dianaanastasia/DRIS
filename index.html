@@ -660,8 +660,9 @@ body {
   &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="29" name="Slut" tags="" position="980,740" size="100,100">&lt;div class=&quot;scene-shell&quot;&gt;
   &lt;div class=&quot;scene&quot;&gt;
-    &lt;img src=&quot;slut.png&quot; alt=&quot;&quot;&gt;
+    &lt;img src=&quot;slut.png&quot; alt=&quot;Slutbild med enkät och möjlighet att starta om scenariot&quot;&gt;
 
+    &lt;!-- Knapp 1: Besvara enkäten --&gt;
     &lt;a
       class=&quot;survey-hotspot&quot;
       href=&quot;https://docs.google.com/forms/d/e/1FAIpQLScF6PgMSjW_reIUYIJ6vRH3hnMcxMoEbUeXNV5fKJe98BfdoQ/viewform&quot;
@@ -671,15 +672,36 @@ body {
       title=&quot;Besvara enkäten&quot;
       style=&quot;
         position: absolute;
-        left: 8%;
-        top: 70%;
-        width: 38%;
-        height: 12%;
+        left: 7.2%;
+        top: 62.8%;
+        width: 38.8%;
+        height: 11.2%;
+        display: block;
+        z-index: 50;
+        border-radius: 26px;
+        cursor: pointer;
+      &quot;&gt;
+    &lt;/a&gt;
+
+    &lt;!-- Knapp 2: Starta om scenariot --&gt;
+    &lt;a
+      class=&quot;hotspot restart-hotspot&quot;
+      href=&quot;javascript:void(0)&quot;
+      onclick=&quot;SugarCube.Engine.play(&#39;05_Forsta_tolkningsvalet&#39;)&quot;
+      aria-label=&quot;Starta om scenariot&quot;
+      title=&quot;Starta om scenariot&quot;
+      style=&quot;
+        position: absolute;
+        left: 7.2%;
+        top: 76.4%;
+        width: 38.8%;
+        height: 8.8%;
         display: block;
         z-index: 50;
         border-radius: 24px;
         cursor: pointer;
       &quot;&gt;
+      Starta om scenariot
     &lt;/a&gt;
   &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata></tw-storydata>
